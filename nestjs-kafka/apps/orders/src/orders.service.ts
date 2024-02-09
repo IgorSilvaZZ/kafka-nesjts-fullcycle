@@ -29,4 +29,11 @@ export class OrdersService {
 
     return order;
   }
+
+  async complete(id: string, status: string) {
+    return await this.prismaService.order.update({
+      where: { id },
+      data: { status },
+    });
+  }
 }
