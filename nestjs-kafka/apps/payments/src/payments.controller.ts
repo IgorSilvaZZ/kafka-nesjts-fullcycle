@@ -7,11 +7,15 @@ interface PaymentMessage {
   price: number;
   client_id: string;
 }
+
+interface PaymentsStatus {
+  status: string;
+}
 @Controller('payments')
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
-  @Get()
+  @Get('')
   async all() {
     return await this.paymentsService.all();
   }
@@ -24,5 +28,20 @@ export class PaymentsController {
       order_id: message.id,
       status: 'APPROVED',
     });
+  }
+
+  // Adicionado para estudos
+  @MessagePattern('payments-approved')
+  async listOrdersApproved() {
+    return await this.paymentsService.listPaymentsApproved();
+  }
+
+  @MessagePattern('list-status-payments')
+  async listPaymentsByStatus(@Payload() data: PaymentsStatus) {
+    const { status } = data;
+
+    return await this.paymentsService.listPaymentsByStatus(
+      status.toUpperCase(),
+    );
   }
 }

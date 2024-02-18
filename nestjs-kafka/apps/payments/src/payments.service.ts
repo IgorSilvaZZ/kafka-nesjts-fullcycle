@@ -28,4 +28,28 @@ export class PaymentsService {
 
     return payment;
   }
+
+  async listPaymentsApproved() {
+    const paymentsApproved = await this.prismaService.payment.findMany({
+      where: {
+        status: { equals: 'APPROVED' },
+      },
+    });
+
+    console.log(paymentsApproved);
+
+    return paymentsApproved;
+  }
+
+  async listPaymentsByStatus(status: string) {
+    const paymentsByStatus = await this.prismaService.payment.findMany({
+      where: {
+        status: { equals: status.toUpperCase() },
+      },
+    });
+
+    console.log(paymentsByStatus);
+
+    return paymentsByStatus;
+  }
 }
